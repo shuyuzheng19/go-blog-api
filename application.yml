@@ -1,0 +1,21 @@
+server:
+  port: 9999
+db:
+  init: true
+  username: postgres
+  password: xiaoyu2528959216
+  host: 192.168.25.147
+  port: 5432
+  name: shuyu_blog
+  timeZone: Asia/Shanghai
+redis:
+  db: 2
+  addr: www.shuyuz.com:6379
+  poolSize: 20
+  password: xiaoyu2528959216
+  timeout: 10
+email:
+  username: shuyuzheng19@163.com
+  password: ONXVXWJZQYQNOKBH
+  host: smtp.163.com
+  addr: smtp.163.com:25

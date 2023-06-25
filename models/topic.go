@@ -2,6 +2,8 @@ package models
 
 import (
 	"gin-demo/common"
+	"gin-demo/response"
+	"gin-demo/vo"
 	"gorm.io/gorm"
 	"time"
 )
@@ -19,4 +21,25 @@ type Topic struct {
 
 func (Topic) TableName() string {
 	return common.TOPIC_TABLE_NAME
+}
+
+func (topic Topic) ToSimpleVo() vo.SimpleTopicVo {
+	return vo.SimpleTopicVo{
+		Id:   topic.Id,
+		Name: topic.Name,
+	}
+}
+
+func (topic Topic) ToVo() vo.TopicVo {
+	return vo.TopicVo{
+		Id:          topic.Id,
+		Name:        topic.Name,
+		Description: topic.Description,
+		CoverImage:  topic.Cover,
+		User: vo.SimpleUserVo{
+			Id:       topic.User.Id,
+			Nickname: topic.User.Nickname,
+		},
+		CreateAt: response.FormatDate(topic.CreateAt),
+	}
 }

@@ -52,11 +52,9 @@ func Authorized(role string) gin.HandlerFunc {
 
 		var roleName = user.Role.Name
 
-		if role == common.USER_ROLE {
+		if role == common.USER_ROLE || roleName == common.SUPER_ROLE {
 			isAuth = true
-		} else if role == common.SUPER_ROLE && roleName == common.SUPER_ROLE {
-			isAuth = true
-		} else if role == common.USER_ROLE && roleName == common.USER_ROLE {
+		} else if role == common.ADMIN_ROLE && roleName == common.ADMIN_ROLE {
 			isAuth = true
 		}
 

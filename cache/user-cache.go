@@ -1,10 +1,13 @@
 package cache
 
-import "gin-demo/models"
+import (
+	"gin-demo/models"
+	"gin-demo/response"
+)
 
 type UserCache interface {
 	//通过用户名查找缓存的用户
-	FindByUsernameCache(username string) (user models.User)
+	FindByUsernameCache(username string) string
 	//将用户缓存到redis
 	SaveUserToCache(user models.User) error
 	//保存邮箱验证码到redis
@@ -19,4 +22,10 @@ type UserCache interface {
 	SaveToken(username string, token string) error
 	//获取Token
 	GetToken(username string) string
+	//获取网站配置信息
+	GetBlogConfig() string
+	//重新设置网站配置
+	SetBlogConfig(config response.BlogConfigInfo) error
+	//删除TOKEN
+	RemoveAccessToken(username string) error
 }

@@ -2,6 +2,7 @@ package models
 
 import (
 	"gin-demo/common"
+	"gin-demo/vo"
 	"gorm.io/gorm"
 	"time"
 )
@@ -15,4 +16,11 @@ type Tag struct {
 
 func (Tag) TableName() string {
 	return common.TAG_TABLE_NAME
+}
+
+func (tag Tag) ToVo() vo.TagVo {
+	return vo.TagVo{
+		Id:   tag.Id,
+		Name: tag.Name,
+	}
 }

@@ -1,21 +1,31 @@
+initSearch: true
 server:
   port: 9999
 db:
-  init: true
+  auto: false
   username: postgres
   password: xiaoyu2528959216
   host: 192.168.25.147
   port: 5432
   name: shuyu_blog
   timeZone: Asia/Shanghai
+meilisearch:
+  apiHost: http://192.168.25.147:7700
+  apiKey: XIAOYUZUISHUAI
 redis:
   db: 2
-  addr: www.shuyuz.com:6379
+  addr: 192.168.25.147:6379
   poolSize: 20
-  password: xiaoyu2528959216
+  password:
   timeout: 10
 email:
   username: shuyuzheng19@163.com
   password: ONXVXWJZQYQNOKBH
   host: smtp.163.com
   addr: smtp.163.com:25
+upload:
+  maxImageSize: 5
+  maxFileSize: 300
+  prefix: static/
+  uri: http://127.0.0.1/static/
+  path: J:/blog/static

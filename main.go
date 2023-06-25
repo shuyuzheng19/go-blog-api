@@ -41,18 +41,13 @@ func Corn(context *gin.Context) {
 
 		if method == "OPTIONS" {
 			context.AbortWithStatus(http.StatusNoContent)
-
-			context.Next()
-
 			return
 		}
 
 	}()
-	context.Next()
 }
 
-func main() {
-
+func SetupConfig() {
 	config.LOGGER = config.LoadLogger()
 
 	defer config.LOGGER.Sync()
@@ -62,6 +57,13 @@ func main() {
 	config.LoadDbConfig()
 
 	config.LoadRedisConfig()
+
+	config.LoadMeiliSearchConfig()
+}
+
+func main() {
+
+	SetupConfig()
 
 	var server = gin.Default()
 
@@ -74,5 +76,7 @@ func main() {
 	var addr = fmt.Sprintf(":%d", config.CONFIG.Server.Port)
 
 	server.Run(addr)
+
+	router.EnableCronJob()
 
 }

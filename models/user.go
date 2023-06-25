@@ -4,6 +4,7 @@ import (
 	"gin-demo/common"
 	"gin-demo/vo"
 	"gorm.io/gorm"
+	"strconv"
 	"time"
 )
 
@@ -25,14 +26,21 @@ func (User) TableName() string {
 	return common.USER_TABLE_NAME
 }
 
+func (user User) ToCommentUserVo() vo.CommentUserVo {
+	return vo.CommentUserVo{
+		Username: user.Username,
+		Avatar:   user.Icon,
+		Level:    0,
+		HomeLink: "/user/" + strconv.Itoa(user.Id),
+	}
+}
+
 func (user User) ToUserVo() vo.UserVo {
 	return vo.UserVo{
 		Id:       user.Id,
 		Username: user.Username,
 		Nickname: user.Nickname,
-		Role: vo.RoleVo{
-			Id:   user.Role.Id,
-			Name: user.Role.Name,
-		},
+		Role:     user.Role.Name,
+		Icon:     user.Icon,
 	}
 }

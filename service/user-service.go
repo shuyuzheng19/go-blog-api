@@ -24,4 +24,10 @@ type UserService interface {
 	Login(userRequest request.UserLoginRequest) response.Token
 	//联系我
 	SendMessageToMyMail(contactRequest request.ContactRequest)
+	//获取网站配置
+	GetBlogConfigInfo() response.BlogConfigInfo
+	//重新设置网站配置
+	SetBlogConfigInfo(config response.BlogConfigInfo)
+	//退出账号
+	Logout(username string)
 }

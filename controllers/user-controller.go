@@ -45,6 +45,18 @@ func (u UserController) RegisteredUser(ctx *gin.Context) {
 
 }
 
+func (u UserController) GetBlogConfigInfo(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, common.Success(u.service.GetBlogConfigInfo()))
+}
+
+func (u UserController) Logout(ctx *gin.Context) {
+	var user = GetUser(ctx)
+
+	u.service.Logout(user.Username)
+
+	ctx.JSON(http.StatusOK, common.OK())
+}
+
 func (u UserController) GenerateLoginImageCode(ctx *gin.Context) {
 	var ip = ctx.ClientIP()
 	var img = u.service.GenerateImageCode(ip)
@@ -69,12 +81,8 @@ func (u UserController) SendEmailCode(ctx *gin.Context) {
 }
 
 func (u UserController) GetCurrentUser(ctx *gin.Context) {
-	var user, exists = ctx.Get("user")
-	if exists {
-		ctx.JSON(http.StatusOK, common.Success(user.(models.User).ToUserVo()))
-	} else {
-		ctx.JSON(http.StatusOK, common.USER_NOT_FOUNT)
-	}
+	var user = GetUser(ctx)
+	ctx.JSON(http.StatusOK, common.Success(user.ToUserVo()))
 }
 
 func (u UserController) Login(ctx *gin.Context) {
@@ -126,6 +134,11 @@ func (u UserController) ContactMe(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, common.OK())
 
+}
+
+func GetUser(ctx *gin.Context) models.User {
+	var user, _ = ctx.Get("user")
+	return user.(models.User)
 }
 
 func NewUserController(service service.UserService) *UserController {

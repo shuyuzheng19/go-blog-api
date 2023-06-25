@@ -3,11 +3,20 @@ package vo
 type UserVo struct {
 	Id       int    `json:"id"`
 	Username string `json:"username"`
-	Nickname string `json:"nickname"`
-	Role     RoleVo `json:"role"`
+	Role     string `json:"role"`
+	Icon     string `json:"icon"`
+	Nickname string `json:"nickName"`
 }
 
 type SimpleUserVo struct {
-	Id       int    `gorm:"json:id"`
-	Nickname string `gorm:"json:nickName"`
+	Id       int    `json:"id"`
+	Nickname string `json:"nickName"`
+}
+
+type CommentUserVo struct {
+	Username string   `json:"username"`
+	Avatar   string   `json:"avatar"`
+	Level    int      `json:"level"`
+	HomeLink string   `json:"homeLink"`
+	LikeIds  []string `json:"likeIds"`
 }

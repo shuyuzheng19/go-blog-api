@@ -1,6 +1,7 @@
 package config
 
 import (
+	"gin-demo/common"
 	"gin-demo/myerr"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -15,11 +16,12 @@ const config_path = "application.yml"
 var LOGGER *zap.Logger
 
 type config struct {
-	Server struct {
+	InitSearch bool `yaml:"initSearch"`
+	Server     struct {
 		Port int `yaml:"port"`
 	} `yaml:"server"`
 	Db struct {
-		Init     bool   `yaml:"init"`
+		Auto     bool   `yaml:"auto"`
 		Username string `yaml:"username"`
 		Password string `yaml:"password"`
 		Name     string `yaml:"name"`
@@ -40,6 +42,44 @@ type config struct {
 		Host     string `yaml:"host"`
 		Addr     string `yaml:"addr"`
 	} `yaml:"email"`
+	MeiliSearchConfig struct {
+		ApiHost string `yaml:"apiHost"`
+		ApiKey  string `yaml:"apiKey"`
+	} `yaml:"meilisearch"`
+	Upload struct {
+		MaxImageSize int64  `yaml:"maxImageSize"`
+		MaxFileSize  int64  `yaml:"maxFileSize"`
+		Prefix       string `yaml:"prefix"`
+		Path         string `yaml:"path"`
+		Uri          string `yaml:"uri"`
+	} `yaml:"upload"`
+}
+
+type UploadConfig struct {
+	MaxImageSize int64  `yaml:"maxImageSize"`
+	MaxFileSize  int64  `yaml:"maxFileSize"`
+	Prefix       string `yaml:"prefix"`
+	Path         string `yaml:"path"`
+	Uri          string `yaml:"uri"`
+}
+
+func GetUploadConfig() UploadConfig {
+
+	var upload = CONFIG.Upload
+
+	os.MkdirAll(upload.Path+"/"+common.AVATAR, os.ModePerm)
+
+	os.MkdirAll(upload.Path+"/"+common.IMAGES, os.ModePerm)
+
+	os.MkdirAll(upload.Path+"/"+common.FILES, os.ModePerm)
+
+	return UploadConfig{
+		MaxImageSize: upload.MaxImageSize * 1024 * 1024,
+		MaxFileSize:  upload.MaxFileSize * 1024 * 1024,
+		Prefix:       upload.Prefix,
+		Path:         upload.Path,
+		Uri:          upload.Uri,
+	}
 }
 
 func LoadConfig() {
@@ -56,9 +96,9 @@ func LoadLogger() *zap.Logger {
 
 	config.Encoding = "console"
 
-	config.OutputPaths = []string{"stdout"}
+	config.OutputPaths = []string{"info.log"}
 
-	config.ErrorOutputPaths = []string{"stderr"}
+	config.ErrorOutputPaths = []string{"error.log"}
 
 	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
@@ -67,4 +107,5 @@ func LoadLogger() *zap.Logger {
 	myerr.MessageError(err, "日志初始化失败")
 
 	return logger
+
 }

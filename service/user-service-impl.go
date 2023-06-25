@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
 	"gin-demo/cache"
 	"gin-demo/common"
@@ -22,6 +23,25 @@ import (
 type UserServiceImpl struct {
 	repository repository.UserRepository
 	cache      cache.UserCache
+}
+
+func (u UserServiceImpl) Logout(username string) {
+	u.cache.RemoveAccessToken(username)
+}
+
+func (u UserServiceImpl) GetBlogConfigInfo() (config response.BlogConfigInfo) {
+	var result = u.cache.GetBlogConfig()
+	if result != "" {
+		json.Unmarshal([]byte(result), &config)
+	} else {
+		config = response.GetDefaultBlogConfigInfo()
+	}
+	return config
+}
+
+// 先不写逻辑 之后加上Check验证字段的逻辑
+func (u UserServiceImpl) SetBlogConfigInfo(config response.BlogConfigInfo) {
+	u.cache.SetBlogConfig(config)
 }
 
 func (u UserServiceImpl) SendMessageToMyMail(contactRequest request.ContactRequest) {
@@ -97,8 +117,6 @@ func (u UserServiceImpl) GenerateImageCode(ip string) image.Image {
 
 	var image, code = c.Create(4, captcha.ALL)
 
-	fmt.Println(code)
-
 	u.cache.SaveLoginCode(ip, code)
 
 	return image
@@ -142,11 +160,17 @@ func (u UserServiceImpl) SendEmail(toEmail string, form string, subject string) 
 }
 
 func (u UserServiceImpl) GetUser(username string) (user models.User) {
-	user = u.cache.FindByUsernameCache(username)
-	if user.Id == 0 {
+	var result = u.cache.FindByUsernameCache(username)
+	if result == "" {
 		user = u.repository.FindByUsername(username)
 		if user.Id > 0 {
 			u.cache.SaveUserToCache(user)
+		}
+	} else {
+		var err = json.Unmarshal([]byte(result), &user)
+
+		if err != nil {
+			return models.User{}
 		}
 	}
 	return user

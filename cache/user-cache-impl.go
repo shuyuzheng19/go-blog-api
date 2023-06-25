@@ -4,11 +4,26 @@ import (
 	"encoding/json"
 	"gin-demo/common"
 	"gin-demo/models"
+	"gin-demo/response"
 	"github.com/go-redis/redis"
 )
 
 type UserCacheImpl struct {
 	redis *redis.Client
+}
+
+func (b UserCacheImpl) RemoveAccessToken(username string) error {
+	return b.redis.Del(common.TOKEN_KEY + username).Err()
+}
+
+func (b UserCacheImpl) GetBlogConfig() string {
+	var result = b.redis.Get(common.BLOG_CONFIG).Val()
+	return result
+}
+
+func (b UserCacheImpl) SetBlogConfig(config response.BlogConfigInfo) error {
+	var buff, _ = json.Marshal(&config)
+	return b.redis.Set(common.BLOG_CONFIG, string(buff), common.BLOG_CONFIG_EXPIRE).Err()
 }
 
 func (b UserCacheImpl) GetToken(username string) string {
@@ -46,20 +61,10 @@ func (b UserCacheImpl) SaveUserToCache(user models.User) error {
 	return b.redis.Set(common.USER_INFO_KEY+user.Username, userJson, common.USER_INFO_EXPIRE).Err()
 }
 
-func (b UserCacheImpl) FindByUsernameCache(username string) (user models.User) {
+func (b UserCacheImpl) FindByUsernameCache(username string) string {
 	var result = b.redis.Get(common.USER_INFO_KEY + username).Val()
 
-	if result == "" {
-		return models.User{}
-	}
-
-	var err = json.Unmarshal([]byte(result), &user)
-
-	if err != nil {
-		return models.User{}
-	}
-
-	return user
+	return result
 }
 
 func NewUserCache(redis *redis.Client) UserCache {

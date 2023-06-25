@@ -1,15 +1,9 @@
 package request
 
 type BlogPageRequest struct {
-	Page int  `json:"page" form:"page"`
-	Cid  int  `json:"cid" form:"cid"`
-	Sort Sort `json:"sort" form:"sort"`
-}
-
-func (request *BlogPageRequest) SetPageDefaultValue() {
-	if request.Page <= 0 {
-		request.Page = 1
-	}
+	Page int  `json:"page"`
+	Cid  int  `json:"cid"`
+	Sort Sort `json:"sort"`
 }
 
 const (

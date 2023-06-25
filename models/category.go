@@ -2,6 +2,7 @@ package models
 
 import (
 	"gin-demo/common"
+	"gin-demo/vo"
 	"gorm.io/gorm"
 	"time"
 )
@@ -15,4 +16,11 @@ type Category struct {
 
 func (Category) TableName() string {
 	return common.CATEGORY_TABLE_NAME
+}
+
+func (category Category) ToVo() *vo.CategoryVo {
+	return &vo.CategoryVo{
+		Id:   category.Id,
+		Name: category.Name,
+	}
 }

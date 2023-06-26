@@ -2,7 +2,6 @@ package models
 
 import (
 	"gin-demo/common"
-	"gin-demo/response"
 	"gin-demo/vo"
 	"gorm.io/gorm"
 	"time"
@@ -40,6 +39,7 @@ func (topic Topic) ToVo() vo.TopicVo {
 			Id:       topic.User.Id,
 			Nickname: topic.User.Nickname,
 		},
-		CreateAt: response.FormatDate(topic.CreateAt),
+		//CreateAt: response.FormatTimeAgo(topic.CreateAt),
+		TimeStamp: topic.CreateAt.UnixMilli(),
 	}
 }

@@ -6,7 +6,8 @@ type TopicVo struct {
 	Description string       `json:"description"`
 	CoverImage  string       `json:"cover"`
 	User        SimpleUserVo `json:"user"`
-	CreateAt    string       `json:"dateStr"`
+	TimeStamp   int64        `json:"timeStamp"`
+	//CreateAt    int64        `json:"dateStr"`
 }
 
 type SimpleTopicVo struct {

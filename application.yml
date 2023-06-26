@@ -1,20 +1,25 @@
 initSearch: true
+logger:
+  encoding: console
+  outputPaths: info.log
+  errorPaths: error.log
 server:
   port: 9999
 db:
+  initRole: true
   auto: false
   username: postgres
-  password: passowrd
-  host: ip
+  password: xiaoyu2528959216
+  host: 192.168.25.147
   port: 5432
   name: shuyu_blog
   timeZone: Asia/Shanghai
 meilisearch:
-  apiHost: http://ip:7700
+  apiHost: http://192.168.25.147:7700
   apiKey: XIAOYUZUISHUAI
 redis:
   db: 2
-  addr: ip:6379
+  addr: 192.168.25.147:6379
   poolSize: 20
   password:
   timeout: 10

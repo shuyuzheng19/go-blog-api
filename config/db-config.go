@@ -26,6 +26,10 @@ func getDB() *gorm.DB {
 		db.AutoMigrate(&models.User{}, &models.Blog{}, &models.BlogLike{}, &models.Comment{}, &models.FileInfo{}, &models.FileMd5{})
 	}
 
+	if db_config.InitRole {
+		db.Model(&models.Role{}).Save(&models.ROLES)
+	}
+
 	return db
 }
 

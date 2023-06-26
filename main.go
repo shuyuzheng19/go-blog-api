@@ -48,11 +48,12 @@ func Corn(context *gin.Context) {
 }
 
 func SetupConfig() {
+
+	config.LoadConfig()
+
 	config.LOGGER = config.LoadLogger()
 
 	defer config.LOGGER.Sync()
-
-	config.LoadConfig()
 
 	config.LoadDbConfig()
 

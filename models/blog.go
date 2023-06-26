@@ -86,7 +86,8 @@ func (blog Blog) ToVo() vo.BlogVo {
 		Title:       blog.Title,
 		Description: blog.Description,
 		CoverImage:  blog.CoverImage,
-		DateStr:     response.FormatTime(blog.CreateAt),
+		TimeStamp:   blog.CreateAt.UnixMilli(),
+		//DateStr:     response.FormatTimeAgo(blog.CreateAt),
 		User: vo.SimpleUserVo{
 			Id:       blog.User.Id,
 			Nickname: blog.User.Nickname,
@@ -104,7 +105,8 @@ func (blog Blog) ToTopicVo() vo.BlogVo {
 		Title:       blog.Title,
 		Description: blog.Description,
 		CoverImage:  blog.CoverImage,
-		DateStr:     response.FormatTime(blog.CreateAt),
+		//DateStr:     response.FormatTimeAgo(blog.CreateAt),
+		TimeStamp: blog.CreateAt.UnixMilli(),
 		User: vo.SimpleUserVo{
 			Id:       blog.User.Id,
 			Nickname: blog.User.Nickname,

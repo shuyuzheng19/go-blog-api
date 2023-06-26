@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/yaml.v3"
 	"os"
+	"strings"
 )
 
 var CONFIG config
@@ -21,6 +22,7 @@ type config struct {
 		Port int `yaml:"port"`
 	} `yaml:"server"`
 	Db struct {
+		InitRole bool   `yaml:"initRole"`
 		Auto     bool   `yaml:"auto"`
 		Username string `yaml:"username"`
 		Password string `yaml:"password"`
@@ -53,6 +55,11 @@ type config struct {
 		Path         string `yaml:"path"`
 		Uri          string `yaml:"uri"`
 	} `yaml:"upload"`
+	Logger struct {
+		Encoding    string `yaml:"encoding"`
+		OutputPaths string `yaml:"outputPaths"`
+		ErrorPaths  string `yaml:"errorPaths"`
+	} `yaml:"logger"`
 }
 
 type UploadConfig struct {
@@ -88,17 +95,18 @@ func LoadConfig() {
 	myerr.MessageError(err, "文件打开失败!")
 
 	yaml.Unmarshal(file, &CONFIG)
+
 }
 
 func LoadLogger() *zap.Logger {
 
 	config := zap.NewProductionConfig()
 
-	config.Encoding = "console"
+	config.Encoding = CONFIG.Logger.Encoding
 
-	config.OutputPaths = []string{"info.log"}
+	config.OutputPaths = strings.Split(CONFIG.Logger.OutputPaths, ",")
 
-	config.ErrorOutputPaths = []string{"error.log"}
+	config.ErrorOutputPaths = strings.Split(CONFIG.Logger.ErrorPaths, ",")
 
 	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 

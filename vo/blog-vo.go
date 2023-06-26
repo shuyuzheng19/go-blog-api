@@ -7,13 +7,14 @@ import (
 )
 
 type BlogVo struct {
-	Id          int          `json:"id"`
-	Title       string       `json:"title"`
-	Description string       `json:"desc"`
-	CoverImage  string       `json:"coverImage"`
-	DateStr     string       `json:"dateStr"`
-	User        SimpleUserVo `json:"user"`
-	Category    *CategoryVo  `json:"category,omitempty"`
+	Id          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"desc"`
+	CoverImage  string `json:"coverImage"`
+	//DateStr     string       `json:"dateStr"`
+	TimeStamp int64        `json:"timeStamp"`
+	User      SimpleUserVo `json:"user"`
+	Category  *CategoryVo  `json:"category,omitempty"`
 }
 
 type ArchiveBlogVo struct {
